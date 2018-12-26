@@ -3,8 +3,8 @@ package services
 import (
 	"errors"
 
-	"../datamodels"
-	"../repositories"
+	"github.com/iris_learning_project/datamodels"
+	"github.com/iris_learning_project/repositories"
 )
 
 // UserService handles CRUID operations of a user datamodel,

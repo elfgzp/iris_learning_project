@@ -5,15 +5,15 @@ package main
 import (
 	"time"
 
-	"./datasource"
-	"./repositories"
-	"./services"
-	"./web/controllers"
-	"./web/middleware"
-
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris/sessions"
+
+	"github.com/iris_learning_project/datasource"
+	"github.com/iris_learning_project/repositories"
+	"github.com/iris_learning_project/services"
+	"github.com/iris_learning_project/web/controllers"
+	"github.com/iris_learning_project/web/middleware"
 )
 
 func main() {

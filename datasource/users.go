@@ -5,7 +5,7 @@ package datasource
 import (
 	"errors"
 
-	"../datamodels"
+	"github.com/iris_learning_project/datamodels"
 )
 
 // Engine is from where to fetch the data, in this case the users.

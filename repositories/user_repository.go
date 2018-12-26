@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	"../datamodels"
+	"github.com/iris_learning_project/datamodels"
 )
 
 // Query represents the visitor and action queries.
