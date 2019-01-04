@@ -4,11 +4,11 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/iris_learning_project/datamodels"
+	"github.com/iris_learning_project/models"
 )
 
 // Query represents the visitor and action queries.
-type Query func(datamodels.User) bool
+type Query func(models.User) bool
 
 // UserRepository handles the basic operations of a user entity/model.
 // It's an interface in order to be testable, i.e a memory user repository or
@@ -16,23 +16,23 @@ type Query func(datamodels.User) bool
 type UserRepository interface {
 	Exec(query Query, action Query, limit int, mode int) (ok bool)
 
-	Select(query Query) (user datamodels.User, found bool)
-	SelectMany(query Query, limit int) (results []datamodels.User)
+	Select(query Query) (user models.User, found bool)
+	SelectMany(query Query, limit int) (results []models.User)
 
-	InsertOrUpdate(user datamodels.User) (updatedUser datamodels.User, err error)
+	InsertOrUpdate(user models.User) (updatedUser models.User, err error)
 	Delete(query Query, limit int) (deleted bool)
 }
 
 // NewUserRepository returns a new user memory-based repository,
 // the one and only repository type in our example.
-func NewUserRepository(source map[int64]datamodels.User) UserRepository {
+func NewUserRepository(source map[int64]models.User) UserRepository {
 	return &userMemoryRepository{source: source}
 }
 
 // userMemoryRepository is a "UserRepository"
 // which manages the users using the memory data source (map).
 type userMemoryRepository struct {
-	source map[int64]datamodels.User
+	source map[int64]models.User
 	mu     sync.RWMutex
 }
 
@@ -81,24 +81,24 @@ func (r *userMemoryRepository) Exec(query Query, action Query, actionLimit int, 
 // It's actually a simple but very clever prototype function
 // I'm using everywhere since I firstly think of it,
 // hope you'll find it very useful as well.
-func (r *userMemoryRepository) Select(query Query) (user datamodels.User, found bool) {
-	found = r.Exec(query, func(m datamodels.User) bool {
+func (r *userMemoryRepository) Select(query Query) (user models.User, found bool) {
+	found = r.Exec(query, func(m models.User) bool {
 		user = m
 		return true
 	}, 1, ReadOnlyMode)
 
-	// set an empty datamodels.User if not found at all.
+	// set an empty models.User if not found at all.
 	if !found {
-		user = datamodels.User{}
+		user = models.User{}
 	}
 
 	return
 }
 
-// SelectMany same as Select but returns one or more datamodels.User as a slice.
+// SelectMany same as Select but returns one or more models.User as a slice.
 // If limit <=0 then it returns everything.
-func (r *userMemoryRepository) SelectMany(query Query, limit int) (results []datamodels.User) {
-	r.Exec(query, func(m datamodels.User) bool {
+func (r *userMemoryRepository) SelectMany(query Query, limit int) (results []models.User) {
+	r.Exec(query, func(m models.User) bool {
 		results = append(results, m)
 		return true
 	}, limit, ReadOnlyMode)
@@ -109,7 +109,7 @@ func (r *userMemoryRepository) SelectMany(query Query, limit int) (results []dat
 // InsertOrUpdate adds or updates a user to the (memory) storage.
 //
 // Returns the new user and an error if any.
-func (r *userMemoryRepository) InsertOrUpdate(user datamodels.User) (datamodels.User, error) {
+func (r *userMemoryRepository) InsertOrUpdate(user models.User) (models.User, error) {
 	id := user.ID
 
 	if id == 0 { // Create new action
@@ -141,12 +141,12 @@ func (r *userMemoryRepository) InsertOrUpdate(user datamodels.User) (datamodels.
 	// Alternatively we could do pure replace instead:
 	// r.source[id] = user
 	// and comment the code below;
-	current, exists := r.Select(func(m datamodels.User) bool {
+	current, exists := r.Select(func(m models.User) bool {
 		return m.ID == id
 	})
 
 	if !exists { // ID is not a real one, return an error.
-		return datamodels.User{}, errors.New("failed to update a nonexistent user")
+		return models.User{}, errors.New("failed to update a nonexistent user")
 	}
 
 	// or comment these and r.source[id] = user for pure replace
@@ -167,7 +167,7 @@ func (r *userMemoryRepository) InsertOrUpdate(user datamodels.User) (datamodels.
 }
 
 func (r *userMemoryRepository) Delete(query Query, limit int) bool {
-	return r.Exec(query, func(m datamodels.User) bool {
+	return r.Exec(query, func(m models.User) bool {
 		delete(r.source, m.ID)
 		return true
 	}, limit, ReadWriteMode)

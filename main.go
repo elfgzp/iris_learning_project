@@ -9,7 +9,7 @@ import (
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris/sessions"
 
-	"github.com/iris_learning_project/datasource"
+	"github.com/iris_learning_project/database"
 	"github.com/iris_learning_project/repositories"
 	"github.com/iris_learning_project/services"
 	"github.com/iris_learning_project/web/controllers"
@@ -39,7 +39,7 @@ func main() {
 	// ---- Serve our controllers. ----
 
 	// Prepare our repositories and services.
-	db, err := datasource.LoadUsers(datasource.Memory)
+	db, err := database.LoadUsers(database.Memory)
 	if err != nil {
 		app.Logger().Fatalf("error while loading the users: %v", err)
 		return

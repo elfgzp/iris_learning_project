@@ -7,7 +7,7 @@ import (
 	"github.com/kataras/iris/mvc"
 	"github.com/kataras/iris/sessions"
 
-	"github.com/iris_learning_project/datamodels"
+	"github.com/iris_learning_project/models"
 	"github.com/iris_learning_project/services"
 )
 
@@ -74,7 +74,7 @@ func (c *UserController) PostRegister() mvc.Result {
 	)
 
 	// create the new user, the password will be hashed by the service.
-	u, err := c.Service.Create(password, datamodels.User{
+	u, err := c.Service.Create(password, models.User{
 		Username:  username,
 		Firstname: firstname,
 	})

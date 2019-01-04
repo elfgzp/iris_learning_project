@@ -38,7 +38,7 @@ type UsersController struct {
 // 	}
 // 	return
 // }
-// otherwise just return the datamodels.
+// otherwise just return the models.
 func (c *UsersController) Get() (results []datamodels.User) {
 	return c.Service.GetAll()
 }

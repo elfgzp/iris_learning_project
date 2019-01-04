@@ -6,7 +6,7 @@ Example:
 
 ```go
 import (
-    "github.com/kataras/iris/_examples/mvc/login/datamodels"
+    models
 
     "github.com/kataras/iris/context"
 )
